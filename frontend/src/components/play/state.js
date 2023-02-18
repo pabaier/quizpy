@@ -1,0 +1,8 @@
+export const HOOK = 'hook'
+export const REGISTRATION = 'registration'
+export const MAKE_TEAMS = 'makeTeams'
+export const QUESTION = 'question'
+export const STANDBY = 'standby'
+export const LEADERBOARD = 'leaderboard'
+export const FINISHED = 'finished'
+export const GAME_OVER = 'gameOver'

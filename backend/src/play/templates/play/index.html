@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Games</title>
+</head>
+<body>
+    Start a Game<br/>
+    <input id="game-host-input" type="text" size="100"/><br/>
+    <input id="game-host-submit" type="button" value="Start Game"/>
+    <br><br>
+    Join a Game<br/>
+    <input id="game-join-input" type="text" size="100"/><br/>
+    <input id="game-join-submit" type="button" value="Enter"/>
+
+    <script>
+        document.querySelector('#game-host-submit').onclick = function(e) {
+            var gameId = document.querySelector('#game-host-input').value;
+            window.location.pathname = '/play/host/' + gameId + '/';
+        };
+
+        document.querySelector('#game-join-submit').onclick = function(e) {
+            var gameHost = document.querySelector('#game-join-input').value;
+            window.location.pathname = '/play/join/' + gameHost + '/';
+        };
+    </script>
+</body>
+</html>

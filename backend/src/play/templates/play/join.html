@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Game</title>
+</head>
+<body>
+    <div id="chat-log" cols="100" rows="20"></div><br/>
+    <input id="chat-message-input" type="text" size="100"/><br/>
+    <input id="chat-message-submit" type="button" value="Send"/>
+    <input id="name" type="button" value="Submit Name"/>
+    <input id="answer" type="button" value="Answer"/>
+
+</body>
+<script>
+    var gameToken = "{{ game_token|escapejs }}";
+
+    var playSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/join/' + gameToken + '/');
+
+    playSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['data'];
+        var state = data['state'];
+        console.log(message);
+        console.log(state);
+        document.querySelector('#chat-log').innerHTML = message;
+    };
+
+    playSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        playSocket.send(JSON.stringify({
+            'data': message,
+            'type': 'connect'
+        }));
+
+        messageInputDom.value = '';
+    };
+
+    document.querySelector('#name').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        playSocket.send(JSON.stringify({
+            'data': message,
+            'type': 'registration'
+        }));
+    };
+
+    document.querySelector('#answer').onclick = function(e) {
+        playSocket.send(JSON.stringify({
+            'data': 'yes',
+            'type': 'answer'
+        }));
+    };
+</script>
+</html>
